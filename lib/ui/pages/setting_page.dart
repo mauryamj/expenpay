@@ -1,4 +1,4 @@
-import 'package:expenpay/pages/welcome_page.dart';
+import 'package:expenpay/ui/pages/welcome_page.dart';
 import 'package:flutter/material.dart';
 
 class SettingPage extends StatelessWidget {

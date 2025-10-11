@@ -1,4 +1,6 @@
-import 'package:expenpay/pages/home_page.dart';
+import 'package:expenpay/ui/pages/home_page.dart';
+import 'package:expenpay/ui/pages/login.dart';
+import 'package:expenpay/ui/pages/signup.dart';
 import 'package:flutter/material.dart';
 
 class Welcomepage extends StatelessWidget {
@@ -31,9 +33,14 @@ class Welcomepage extends StatelessWidget {
                       padding: const EdgeInsets.all(8.0),
                       child: ElevatedButton(
                         onPressed: () {
-                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
-                            return HomePage();
-                          },));
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return Login();
+                              },
+                            ),
+                          );
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.white,
@@ -58,7 +65,16 @@ class Welcomepage extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return Signup();
+                              },
+                            ),
+                          );
+                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.white,
                           foregroundColor: Colors.black,

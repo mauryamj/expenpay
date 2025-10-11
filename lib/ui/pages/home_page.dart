@@ -1,34 +1,34 @@
-import 'package:expenpay/pages/setting_page.dart';
+import 'package:expenpay/ui/pages/setting_page.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
-  final int Spending = 2000;
-  final int Income = 10000;
-  final int Balance = 8000;
-  final String Name = "Amit Sharma";
+  final int spending = 2000;
+  final int income = 10000;
+  final int balance = 8000;
+  final String name = "Amit Sharma";
   final String dayparts = "Afternoon";
   @override
   Widget build(BuildContext context) {
     final users = [
-      {"name": "Amit Sharma", "image": "assets/images/people/u1.png"},
-      {"name": "Priya Singh", "image": "assets/images/people/u2.png"},
-      {"name": "Rahul Verma", "image": "assets/images/people/u3.png"},
-      {"name": "Sneha Patel", "image": "assets/images/people/u4.png"},
-      {"name": "Vikram Joshi", "image": "assets/images/people/u5.png"},
-      {"name": "Neha Gupta", "image": "assets/images/people/u6.png"},
-      {"name": "Rohan Mehta", "image": "assets/images/people/u7.png"},
-      {"name": "Simran Kaur", "image": "assets/images/people/u8.png"},
+      {"name": "Amit Sharma", "image": "assets/images/people/u1.jpg"},
+      {"name": "Priya Singh", "image": "assets/images/people/u2.jpg"},
+      {"name": "Rahul Verma", "image": "assets/images/people/u3.jpg"},
+      {"name": "Sneha Patel", "image": "assets/images/people/u4.jpg"},
+      {"name": "Vikram Joshi", "image": "assets/images/people/u5.jpg"},
+      {"name": "Neha Gupta", "image": "assets/images/people/u6.jpg"},
+      {"name": "Rohan Mehta", "image": "assets/images/people/u7.jpg"},
+      {"name": "Simran Kaur", "image": "assets/images/people/u8.jpg"},
     ];
     final historys = [
-      {"name": "Amit Sharma", "amount": 200,"color": "green[400]"},
-      {"name": "Youtube Ad", "amount":245 ,"color": "red[400]"},
-      {"name": "Rahul Verma", "amount": 199,"color": "green[400]"},
-      {"name": "Sneha Patel", "amount": 600,"color": "green[400]"},
-      {"name": "Vikram Joshi", "amount": 220,"color": "red[400]"},
-      {"name": "Neha Gupta", "amount": 230,"color": "red[400]"},
-      {"name": "Rohan Mehta", "amount":500,"color": "green[400]"},
-      {"name": "Simran Kaur", "amount": 100,"color": "red[400]"},
+      {"name": "Amit Sharma", "amount": 200, "color": "green[400]"},
+      {"name": "Youtube Ad", "amount": 245, "color": "red[400]"},
+      {"name": "Rahul Verma", "amount": 199, "color": "green[400]"},
+      {"name": "Sneha Patel", "amount": 600, "color": "green[400]"},
+      {"name": "Vikram Joshi", "amount": 220, "color": "red[400]"},
+      {"name": "Neha Gupta", "amount": 230, "color": "red[400]"},
+      {"name": "Rohan Mehta", "amount": 500, "color": "green[400]"},
+      {"name": "Simran Kaur", "amount": 100, "color": "red[400]"},
     ];
     return Scaffold(
       appBar: AppBar(
@@ -58,7 +58,7 @@ class HomePage extends StatelessWidget {
             children: [
               Text("good $dayparts"),
               Text(
-                Name,
+                name,
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 20),
@@ -80,7 +80,7 @@ class HomePage extends StatelessWidget {
                           Icon(Icons.keyboard_arrow_up),
 
                           Column(
-                            children: [Text("spending "), Text("₹$Spending")],
+                            children: [Text("spending "), Text("₹$spending")],
                           ),
                         ],
                       ),
@@ -100,7 +100,7 @@ class HomePage extends StatelessWidget {
 
                         children: [
                           Icon(Icons.keyboard_arrow_down),
-                          Column(children: [Text("Income "), Text("₹$Income")]),
+                          Column(children: [Text("Income "), Text("₹$income")]),
                         ],
                       ),
                     ),
@@ -118,7 +118,7 @@ class HomePage extends StatelessWidget {
                         backgroundColor: Colors.white12,
                         foregroundColor: Colors.white,
                       ),
-                      child: Text("Balance: ₹$Balance", style: TextStyle()),
+                      child: Text("Balance: ₹$balance", style: TextStyle()),
                     ),
                   ),
                 ),
@@ -160,7 +160,7 @@ class HomePage extends StatelessWidget {
                         child: Column(
                           children: [
                             CircleAvatar(
-                              backgroundImage: AssetImage(user["image"]!),
+                              backgroundImage: ResizeImage(AssetImage(user["image"]!),width:100 ),
                               radius: 18,
                             ),
                             SizedBox(width: 12),
@@ -174,7 +174,6 @@ class HomePage extends StatelessWidget {
               SizedBox(height: 20),
               Text("Transaction History"),
               for (var history in historys)
-
                 SizedBox(
                   height: 70,
                   width: double.infinity,
@@ -186,7 +185,10 @@ class HomePage extends StatelessWidget {
                         children: [
                           Text("${history["name"]}"),
                           Spacer(), // Pushes the next widget to the end
-                          Text("${history["amount"]}",style: TextStyle(color: Colors.red[400]),),
+                          Text(
+                            "${history["amount"]}",
+                            style: TextStyle(color: Colors.red[400]),
+                          ),
                         ],
                       ),
                     ),
@@ -196,21 +198,21 @@ class HomePage extends StatelessWidget {
           ),
         ),
       ),
-      floatingActionButton:Row(
+      floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.center,
-        children:[
+        children: [
           SizedBox(
-          height: 60,
-          width: 120,
-          child: Card(
-            child: FloatingActionButton(onPressed: () {
-              
-            }, child: Icon(Icons.qr_code)),
+            height: 60,
+            width: 120,
+            child: Card(
+              child: FloatingActionButton(
+                onPressed: () {},
+                child: Icon(Icons.qr_code),
+              ),
+            ),
           ),
-        ),
-        ] 
-        
-      ) ,
+        ],
+      ),
     );
   }
 }
