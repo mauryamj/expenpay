@@ -1,0 +1,1 @@
+{"flutter":{"platforms":{"android":{"default":{"projectId":"expenpay","appId":"1:1000261798325:android:cc399baf76f833b8feb1fc","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"expenpay","configurations":{"android":"1:1000261798325:android:cc399baf76f833b8feb1fc"}}}}}}
