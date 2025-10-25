@@ -16,4 +16,18 @@ class AuthService {
       password: password,
     );
   }
+
+  Future<UserCredential> login({
+    required String email,
+    required String password,
+  }) async {
+    return await firebaseAuth.signInWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+  }
+
+  Future<void> forgotPassword({required String email}) async {
+    return await firebaseAuth.sendPasswordResetEmail(email: email);
+  }
 }

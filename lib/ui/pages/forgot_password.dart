@@ -1,35 +1,22 @@
 import 'package:expenpay/data/auth/auth_service.dart';
-import 'package:expenpay/ui/pages/home_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class Signup extends StatefulWidget {
-  const Signup({super.key});
+class ForgotPassword extends StatefulWidget {
+  const ForgotPassword({super.key});
 
   @override
-  State<Signup> createState() => _SignupState();
+  State<ForgotPassword> createState() => _ForgotPasswordState();
 }
 
-class _SignupState extends State<Signup> {
-  TextEditingController passwordController = TextEditingController();
-  TextEditingController usernameController = TextEditingController();
+class _ForgotPasswordState extends State<ForgotPassword> {
   TextEditingController emailController = TextEditingController();
   String? errorMessage;
 
-  register() {
+  changePassword() {
     try {
-      authService.value.signUp(
-        email: emailController.text,
-        password: passwordController.text,
-      );
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) {
-            return HomePage();
-          },
-        ),
-      );
+      authService.value.forgotPassword(email: emailController.text);
+      Navigator.pop(context);
     } on FirebaseAuthException catch (e) {
       errorMessage = e.message;
     }
@@ -53,7 +40,7 @@ class _SignupState extends State<Signup> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Get started",
+                        "Forgot Password",
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 30,
@@ -61,7 +48,7 @@ class _SignupState extends State<Signup> {
                         ),
                       ),
                       Text(
-                        "Register a new account on ExpenPay",
+                        "Enter an existing account to change password",
                         style: TextStyle(color: Colors.white, fontSize: 15),
                       ),
                     ],
@@ -77,49 +64,9 @@ class _SignupState extends State<Signup> {
                   SizedBox(
                     width: 350,
                     child: TextField(
-                      controller: usernameController,
-                      decoration: InputDecoration(
-                        hint: const Text("Username"),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-
-                  SizedBox(
-                    width: 350,
-                    child: TextField(
                       controller: emailController,
                       decoration: InputDecoration(
-                        hint: Text("Email id"),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  SizedBox(
-                    width: 350,
-                    child: TextField(
-                      controller: passwordController,
-                      decoration: InputDecoration(
-                        hint: Text("password"),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-
-                  SizedBox(
-                    width: 350,
-                    child: TextField(
-                      decoration: InputDecoration(
-                        hint: Text("confirm password"),
+                        hint: Text("Email"),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(20),
                         ),
@@ -128,12 +75,12 @@ class _SignupState extends State<Signup> {
                   ),
                   Text(errorMessage ?? "", style: TextStyle(color: Colors.red)),
                   ElevatedButton(
-                    onPressed: () => register(),
+                    onPressed: () => changePassword(),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.deepPurpleAccent,
                     ),
                     child: Text(
-                      "Signup",
+                      "Send Email",
                       style: TextStyle(color: Colors.white),
                     ),
                   ),

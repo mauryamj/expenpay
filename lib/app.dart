@@ -15,10 +15,12 @@ class _AppState extends State<App> {
       title: 'ExpenPay',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple,brightness: Brightness.dark),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.deepPurple,
+          brightness: Brightness.light,
+        ),
       ),
-      home: Welcomepage()
+      home: Welcomepage(),
     );
   }
 }
