@@ -18,7 +18,7 @@ class _LoginState extends State<Login> {
 
   signin() {
     try {
-      authService.value.signUp(
+      authService.value.login(
         email: emailController.text,
         password: passwordController.text,
       );
@@ -113,7 +113,7 @@ class _LoginState extends State<Login> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.deepPurpleAccent,
                     ),
-                    child: Text("Login"),
+                    child: Text("Login", style: TextStyle(color: Colors.white)),
                   ),
                 ],
               ),

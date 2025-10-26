@@ -1,36 +1,41 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class TransactionModel {
   final String name;
   final double amount;
-  final String type;
-  final DateTime date;
+  final Timestamp date;
   final String category;
-  final String image;
 
   TransactionModel({
     required this.name,
     required this.amount,
-    required this.type,
     required this.date,
     required this.category,
-    required this.image,
   });
-  Map<String, dynamic> toJson() => {
-    "name": name,
-    "amount": amount,
-    "type": type,
-    "date": date.toIso8601String(),
-    "category": category,
-    "image": image,
-  };
 
-  factory TransactionModel.fromjson(Map<String, dynamic> json) {
+  TransactionModel.fromJson(Map<String, Object?> json)
+    : this(
+        name: json["name"]! as String,
+        amount: (json["amount"] as num).toDouble(),
+        date: json["date"]! as Timestamp,
+        category: json["category"]! as String,
+      );
+
+  TransactionModel copyWith({
+    String? name,
+    double? amount,
+    Timestamp? date,
+    String? category,
+  }) {
     return TransactionModel(
-      name: json["name"],
-      amount: (json["amount"] as num).toDouble(),
-      type: json["type"],
-      date: DateTime.parse(json["date"]),
-      category: json["category"],
-      image: json["image"],
+      name: name ?? this.name,
+      amount: amount ?? this.amount,
+      date: date ?? this.date,
+      category: category ?? this.category,
     );
+  }
+
+  Map<String, Object?> toJson() {
+    return {"name": name, "amount": amount, "date": date, "category": category};
   }
 }

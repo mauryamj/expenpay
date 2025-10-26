@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:expenpay/data/database/db_service.dart';
 import 'package:expenpay/data/repositories/transaction_repository.dart';
 import 'package:expenpay/logic/home_bloc/home_bloc.dart';
 import 'package:expenpay/ui/pages/setting_page.dart';
@@ -6,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({super.key});
+  final DbService dbService = DbService();
   final List user = [
     {"name": "Amit Sharma", "image": "assets/images/people/u1.jpg"},
     {"name": "Priya Singh", "image": "assets/images/people/u2.jpg"},
@@ -27,10 +30,6 @@ class HomePage extends StatelessWidget {
         listener: (context, state) {},
         builder: (context, state) {
           if (state is HomeLoaded) {
-            final income = state.totalIncome;
-            final expense = state.totalExpense;
-            final balance = state.balance;
-            final transactions = state.transactions;
             return Scaffold(
               appBar: AppBar(
                 title: Text("ExpenPay"),
@@ -83,10 +82,7 @@ class HomePage extends StatelessWidget {
                                 Icon(Icons.keyboard_arrow_up),
 
                                 Column(
-                                  children: [
-                                    Text("spending "),
-                                    Text("₹$expense"),
-                                  ],
+                                  children: [Text("spending "), Text("₹")],
                                 ),
                               ],
                             ),
@@ -106,9 +102,7 @@ class HomePage extends StatelessWidget {
 
                               children: [
                                 Icon(Icons.keyboard_arrow_down),
-                                Column(
-                                  children: [Text("Income "), Text("₹$income")],
-                                ),
+                                Column(children: [Text("Income "), Text("₹")]),
                               ],
                             ),
                           ),
@@ -125,7 +119,7 @@ class HomePage extends StatelessWidget {
                             backgroundColor: Colors.white12,
                             foregroundColor: Colors.white,
                           ),
-                          child: Text("Balance: ₹$balance", style: TextStyle()),
+                          child: Text("Balance: ₹", style: TextStyle()),
                         ),
                       ),
                     ),
@@ -184,28 +178,47 @@ class HomePage extends StatelessWidget {
                     Text("Transaction History"),
                     SizedBox(
                       height: 200,
-                      child: ListView.builder(
-                        itemCount: transactions.length,
-                        itemBuilder: (context, index) {
-                          final tx = transactions[index];
-                          final color = tx.type == "income"
-                              ? Colors.green[400]
-                              : Colors.red[400];
-                          return Card(
-                            color: Colors.white12,
-                            child: ListTile(
-                              leading: CircleAvatar(
-                                backgroundImage: AssetImage(tx.image),
-                              ),
-                              title: Text(tx.name),
-                              subtitle: Text(tx.category),
-                              trailing: Text(
-                                "${tx.type == 'income' ? '+' : '-'} ₹${tx.amount}",
-                                style: TextStyle(color: color),
-                              ),
-                            ),
-                          );
-                        },
+                      child: StreamBuilder(
+                        stream: dbService.getTransactions(),
+                        builder:
+                            (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                              if (snapshot.hasError) {
+                                return const Center(
+                                  child: Text("Something went wrong"),
+                                );
+                              }
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              }
+                              List transaction = snapshot.data?.docs ?? [];
+                              if (transaction.isEmpty) {
+                                return const Center(child: Text("empty"));
+                              }
+                              return ListView.builder(
+                                itemCount: transaction.length,
+                                itemBuilder: (context, index) {
+                                  final tx = transaction[index].data();
+                                  String txid = transaction[index].id;
+                                  final color = tx.amount > 0
+                                      ? Colors.green[400]
+                                      : Colors.red[400];
+                                  return Card(
+                                    color: Colors.white12,
+                                    child: ListTile(
+                                      title: Text(tx.name),
+                                      subtitle: Text(tx.category),
+                                      trailing: Text(
+                                        "${tx.amount}",
+                                        style: TextStyle(color: color),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              );
+                            },
                       ),
                     ),
                   ],

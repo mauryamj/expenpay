@@ -13,10 +13,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       final transitions = repository.getAllTransactions();
       emit(
         HomeLoaded(
-          transactions: transitions,
-          totalIncome: repository.totalIncome,
-          totalExpense: repository.totalExpense,
-          balance: repository.balance,
+        
         ),
       );
     });
