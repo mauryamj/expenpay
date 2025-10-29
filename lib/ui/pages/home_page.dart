@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:expenpay/data/database/db_service.dart';
+import 'package:expenpay/data/models/transaction_model.dart';
 import 'package:expenpay/data/repositories/transaction_repository.dart';
 import 'package:expenpay/logic/home_bloc/home_bloc.dart';
 import 'package:expenpay/ui/pages/setting_page.dart';
@@ -21,6 +22,12 @@ class HomePage extends StatelessWidget {
   ];
   final String name = "Amit Sharma";
   final String dayparts = "Afternoon";
+
+  late final TextEditingController _nameController = TextEditingController();
+  late final TextEditingController _amountController = TextEditingController();
+  late final TextEditingController _categoryController =
+      TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -133,9 +140,14 @@ class HomePage extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            TextButton(onPressed: () {}, child: Text("Send")),
                             TextButton(
-                              onPressed: () {},
+                              onPressed: () =>
+                                  _diaplayTextInputDialog(context, -1),
+                              child: Text("Send"),
+                            ),
+                            TextButton(
+                              onPressed: () =>
+                                  _diaplayTextInputDialog(context, 1),
                               child: Text("Recieve"),
                             ),
                             TextButton(
@@ -233,7 +245,7 @@ class HomePage extends StatelessWidget {
                     width: 120,
                     child: Card(
                       child: FloatingActionButton(
-                        onPressed: () {},
+                        onPressed: () => _diaplayTextInputDialog(context, -1),
                         child: Icon(Icons.qr_code),
                       ),
                     ),
@@ -246,6 +258,78 @@ class HomePage extends StatelessWidget {
           }
         },
       ),
+    );
+  }
+
+  void _diaplayTextInputDialog(BuildContext context, num? type) async {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("Transactions"),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: _nameController,
+
+                decoration: InputDecoration(
+                  hintText: "Name",
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
+              ),
+              SizedBox(height: 20),
+              TextField(
+                controller: _amountController,
+                decoration: InputDecoration(
+                  hintText: "Amount",
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
+                keyboardType: TextInputType.number,
+              ),
+              SizedBox(height: 20),
+
+              TextField(
+                controller: _categoryController,
+                decoration: InputDecoration(
+                  hintText: "Category",
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          actions: <Widget>[
+            ElevatedButton(
+              child: Text("Cancel"),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            ElevatedButton(
+              child: Text("OK"),
+              onPressed: () {
+                final transaction = TransactionModel(
+                  name: _nameController.text,
+                  amount: type! * num.tryParse(_amountController.text)! ?? 0.0,
+                  date: Timestamp.now(),
+                  category: _categoryController.text,
+                );
+                dbService.addTransaction(transaction);
+                Navigator.pop(context);
+                _nameController.clear();
+                _amountController.clear();
+                _categoryController.clear();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

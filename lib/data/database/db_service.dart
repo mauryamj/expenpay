@@ -18,4 +18,8 @@ class DbService {
   Stream<QuerySnapshot> getTransactions() {
     return _transactionsRef.snapshots();
   }
+
+  Future<void> addTransaction(TransactionModel transaction) {
+    return _transactionsRef.add(transaction);
+  }
 }

@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class TransactionModel {
   final String name;
-  final double amount;
+  final num amount;
   final Timestamp date;
   final String category;
 
