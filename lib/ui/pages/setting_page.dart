@@ -1,4 +1,5 @@
 import 'package:expenpay/ui/pages/welcome_page.dart';
+import 'package:expenpay/data/auth/auth_service.dart';
 import 'package:flutter/material.dart';
 
 class SettingPage extends StatelessWidget {
@@ -59,19 +60,22 @@ class SettingPage extends StatelessWidget {
                     builder: (context) {
                       return AlertDialog(
                         actions: [
-                          FilledButton(onPressed: () {
-                            Navigator.of(context).pop();
-                          }, child: Text("Cancel")),
                           FilledButton(
                             onPressed: () {
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) {
-                                    return Welcomepage();
-                                  },
-                                ),
-                              );
+                              Navigator.of(context).pop();
+                            },
+                            child: Text("Cancel"),
+                          ),
+                          FilledButton(
+                            onPressed: () {
+                              // authService.value.signOut().then((_) {
+                              //   Navigator.of(context).pushAndRemoveUntil(
+                              //     MaterialPageRoute(
+                              //       builder: (context) => Welcomepage(),
+                              //     ),
+                              //     (Route<dynamic> route) => false,
+                              //   );
+                              // });
                             },
                             child: Text("Sign Out"),
                           ),

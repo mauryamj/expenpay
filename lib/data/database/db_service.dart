@@ -16,7 +16,7 @@ class DbService {
         );
   }
   Stream<QuerySnapshot> getTransactions() {
-    return _transactionsRef.snapshots();
+    return _transactionsRef.orderBy('date', descending: true).snapshots();
   }
 
   Future<void> addTransaction(TransactionModel transaction) {

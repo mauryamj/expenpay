@@ -7,8 +7,4 @@ final class HomeInitial extends HomeState {}
 
 class HomeUpdated extends HomeState {}
 
-class HomeLoading extends HomeState {}
-
-class HomeLoaded extends HomeState {
-  HomeLoaded();
-}
+class HomeLoaded extends HomeState {}

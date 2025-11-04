@@ -21,8 +21,20 @@ class HomePage extends StatelessWidget {
     {"name": "Simran Kaur", "image": "assets/images/people/u8.jpg"},
   ];
   final String name = "Amit Sharma";
-  final String dayparts = "Afternoon";
+  String getDayPart() {
+    final hour = DateTime.now().hour;
+    if (hour < 12) {
+      return 'Morning';
+    }
+    if (hour < 17) {
+      return 'Afternoon';
+    }
+    return 'Evening';
+  }
 
+  double totalIncome = 0.0;
+  double totalSpending = 0.0;
+  double balance = 20000;
   late final TextEditingController _nameController = TextEditingController();
   late final TextEditingController _amountController = TextEditingController();
   late final TextEditingController _categoryController =
@@ -30,6 +42,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    balance = balance + totalIncome - totalSpending;
     return BlocProvider(
       create: (context) =>
           HomeBloc(TransactionRepository())..add(LoadTransactions()),
@@ -62,7 +75,7 @@ class HomePage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("good $dayparts"),
+                    Text("good ${getDayPart()}"),
                     Text(
                       name,
                       style: TextStyle(
@@ -72,64 +85,104 @@ class HomePage extends StatelessWidget {
                     ),
                     SizedBox(height: 20),
                     Text("This Month", style: TextStyle(fontSize: 18)),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          width: 150,
-                          child: ElevatedButton(
-                            onPressed: () {},
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.red[400],
-                              foregroundColor: Colors.white,
-                            ),
-                            child: Row(
+                    StreamBuilder(
+                      stream: dbService.getTransactions(),
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData)
+                          return CircularProgressIndicator();
+
+                        var docs = snapshot.data?.docs ?? [];
+                        totalIncome = 0.0;
+                        totalSpending = 0.0;
+
+                        for (var doc in docs) {
+                          TransactionModel t = doc.data() as TransactionModel;
+                          if (t.amount > 0) {
+                            totalIncome += t.amount.toDouble();
+                          } else if (t.amount < 0) {
+                            totalSpending += t.amount.abs().toDouble();
+                          }
+                        }
+                        balance = balance + totalIncome - totalSpending;
+
+                        return Column(
+                          children: [
+                            Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Icon(Icons.keyboard_arrow_up),
+                                SizedBox(
+                                  width: 150,
+                                  child: ElevatedButton(
+                                    onPressed: () {},
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.red[400],
+                                      foregroundColor: Colors.white,
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(Icons.keyboard_arrow_up),
 
-                                Column(
-                                  children: [Text("spending "), Text("₹")],
+                                        Column(
+                                          children: [
+                                            Text("spending "),
+                                            Text("₹ $totalSpending"),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(width: 20),
+                                SizedBox(
+                                  width: 150,
+                                  child: ElevatedButton(
+                                    onPressed: () {},
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.green[400],
+                                      foregroundColor: Colors.white,
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+
+                                      children: [
+                                        Icon(Icons.keyboard_arrow_down),
+                                        Column(
+                                          children: [
+                                            Text("Income "),
+                                            Text("₹ $totalIncome"),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 ),
                               ],
                             ),
-                          ),
-                        ),
-                        SizedBox(width: 20),
-                        SizedBox(
-                          width: 150,
-                          child: ElevatedButton(
-                            onPressed: () {},
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.green[400],
-                              foregroundColor: Colors.white,
+                            SizedBox(height: 20),
+                            SizedBox(
+                              height: 30,
+                              child: Center(
+                                child: ElevatedButton(
+                                  onPressed: () {},
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.white12,
+                                    foregroundColor: Colors.white,
+                                  ),
+                                  child: Text(
+                                    "Balance: ₹$balance",
+                                    style: TextStyle(),
+                                  ),
+                                ),
+                              ),
                             ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
+                          ],
+                        );
+                      },
+                    ),
 
-                              children: [
-                                Icon(Icons.keyboard_arrow_down),
-                                Column(children: [Text("Income "), Text("₹")]),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 20),
-                    SizedBox(
-                      height: 30,
-                      child: Center(
-                        child: ElevatedButton(
-                          onPressed: () {},
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white12,
-                            foregroundColor: Colors.white,
-                          ),
-                          child: Text("Balance: ₹", style: TextStyle()),
-                        ),
-                      ),
-                    ),
                     SizedBox(height: 10),
 
                     SizedBox(
